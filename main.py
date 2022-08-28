@@ -10,10 +10,7 @@ class Puzzle:
         count=0
         while count<1:
             self.random_move(self.copia)
-            self.random_move(self.original)
             count=count+1
-        print(self.copia)
-        print(self.original)
         
     def random_solve(self):
         print("Resolviendo matriz aleatoriamente...")
@@ -30,24 +27,25 @@ class Puzzle:
         movimientos=0
         movimientos_original=[]
         movimientos_copia=[]
-        print(self.copia)
-        print(self.original)
-    # while True:
+        print("Matriz inicial desordenada: \n",self.copia)
+        print("Matriz original: \n",self.original)
+        while True:
         # movimiento en la copia
-        if np.array_equiv(self.copia,self.original)==False:
-            self.random_move(self.copia)
-            movimientos_copia.append(self.copia)
-            movimientos=movimientos+1
-         # movimiento en la original. Reevaluamos condicion
-            if np.array_equiv(self.original,self.copia)==False:
+            if np.array_equiv(self.copia,self.original)==False:
                 self.random_move(self.copia)
-                movimientos_original.append(self.original)
-                
-        if np.array_equiv(self.copia,self.original)==True:
-            print(self.original)
-            print(self.copia)
-            i=0
-            print("Solucion: ")
+                movimientos_copia.append(self.copia)
+                movimientos=movimientos+1
+            # movimiento en la original. Reevaluamos condicion
+                if np.array_equiv(self.original,self.copia)==False:
+                    self.random_move(self.copia)
+                    movimientos_original.append(self.original)
+                    
+            if np.array_equiv(self.copia,self.original)==True:
+                print("Punto de encuentro: ")
+                print(self.original)
+                print(self.copia)
+                break
+                # print("Solucion: ")
             # mostramos la ruta que hizo para solucionar el puzzle
             # for matriz in movimientos_original:
             #     print(matriz)
@@ -106,6 +104,7 @@ class Puzzle:
 np_matrix_1=np.matrix('1 2 3; 4 5 6; 7 8 0')
 np_matrix_2=np.matrix('1 2 3; 4 5 6; 7 8 0')
 pz=Puzzle(np_matrix_1,np_matrix_2)
+# Se puede ejecutar un metodo a la vez
 pz.sort_matrix()
 # pz.random_solve()
-# pz.metodo_bidireccional()
+pz.metodo_bidireccional()
