@@ -8,7 +8,7 @@ class Puzzle:
             
     def sort_matrix(self):
         count=0
-        while count<50:
+        while count<2:
             self.random_move(self.copia)
             count=count+1
         return self.copia
@@ -135,18 +135,12 @@ class Puzzle:
 np_matrix_1=np.matrix('1 2 3; 4 5 6; 7 8 0')
 np_matrix_2=np.matrix('1 2 3; 4 5 6; 7 8 0')
 pz=Puzzle(np_matrix_1,np_matrix_2)
-# Se puede ejecutar un metodo a la vez
+
 matriz_desordenada=pz.sort_matrix()
-# pz.random_solve()
+
 print("Matriz desordenada: ")
 print(matriz_desordenada)
-print("Nodos: ")
-nodos=pz.obtener_nodos_hijos(matriz_desordenada)
-i=0
-arbol=[]
 
-for nodo in nodos:
-    if not np.array_equal(nodo,np_matrix_1):
-        pz.obtener_nodos_hijos(nodo)
-    else:
-        pass
+nodos_hijos=pz.obtener_nodos_hijos(matriz_desordenada)
+
+pz.random_solve()
