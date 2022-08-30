@@ -8,7 +8,7 @@ class Puzzle:
             
     def sort_matrix(self):
         count=0
-        while count<2:
+        while count<50:
             self.random_move(self.copia)
             count=count+1
         return self.copia
