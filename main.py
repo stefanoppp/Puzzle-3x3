@@ -1,4 +1,3 @@
-from timeit import repeat
 import numpy as np
 import random
 class Puzzle:
@@ -9,9 +8,10 @@ class Puzzle:
             
     def sort_matrix(self):
         count=0
-        while count<1:
+        while count<50:
             self.random_move(self.copia)
             count=count+1
+        return self.copia
         
     def random_solve(self):
         print("Resolviendo matriz aleatoriamente...")
@@ -24,93 +24,69 @@ class Puzzle:
         print("Intentos: ",intentos)
         
     def obtener_nodos_hijos(self,matrix):
-            cero=np.where(matrix==0)
-            row_num=cero[0]
-            column_num=cero[1]
-            nodos=[]
-            if column_num==[0]:
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num, column_num+1]
-                matrix[row_num, column_num+1]=aux
-                nodos.append(matrix)
-                
-            if column_num==[1]:
-                aux=matrix[row_num, column_num]
-                aux2=matrix[row_num, column_num+1]
-                matrix[row_num, column_num]=matrix[row_num, column_num+1]
-                matrix[row_num, column_num+1]=aux
-                nodos.append(matrix)
-                # volvemos a la matriz normal para pasar el otro nodo--------
-                matrix[row_num, column_num]=aux
-                matrix[row_num, column_num+1]=aux2
-                # -----------------------------------------
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num, column_num-1]
-                matrix[row_num, column_num-1]=aux
-                nodos.append(matrix)
-                
-            if column_num==[2]:
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num, column_num-1]
-                matrix[row_num, column_num-1]=aux               
+        copia=np.copy(matrix)
+        cero=np.where(copia==0)
+        row_num=cero[0]
+        column_num=cero[1]
+        nodos=[]
+        # tratamos filas----------------------------
+        if row_num==0:
+            aux=copia[row_num+1,column_num]
+            copia[row_num,column_num]=aux
+            copia[row_num+1,column_num]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)
             
-            if row_num==[0]:
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num+1, column_num]
-                matrix[row_num+1, column_num]=aux
+        if row_num!=0 and row_num!=2:
+            aux=copia[row_num+1,column_num]
+            copia[row_num,column_num]=aux
+            copia[row_num+1,column_num]=0
+            # reestablecemos matriz
+            nodos.append(copia)
+            copia=np.copy(matrix)
+            # ----------------------------------
+            aux=copia[row_num-1,column_num]
+            copia[row_num,column_num]=aux
+            copia[row_num-1,column_num]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)
             
-            if row_num==[1]:
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num+1, column_num]
-                matrix[row_num+1, column_num]=aux
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num-1, column_num]
-                matrix[row_num-1, column_num]=aux
-                
-            if row_num==[2]:
-                aux=matrix[row_num, column_num]
-                matrix[row_num, column_num]=matrix[row_num-1, column_num]
-                matrix[row_num-1, column_num]=aux
-   
-    def metodo_bidireccional(self):
-        print("Resolviendo matriz bidireccionalmente...")
-        movimientos=0
-        movimientos_original=[]
-        movimientos_copia=[]
-        print("Matriz inicial desordenada: \n",self.copia)
-        print("Matriz original: \n",self.original)
-        while True:
-        # movimiento en la copia
-            if np.array_equiv(self.copia,self.original)==False:
-                self.random_move(self.copia)
-                movimientos_copia.append(self.copia)
-                movimientos=movimientos+1
-            # movimiento en la original. Reevaluamos condicion
-                if np.array_equiv(self.original,self.copia)==False:
-                    self.random_move(self.original)
-                    movimientos_original.append(self.original)
+        if row_num==2:
+            aux=copia[row_num-1,column_num]
+            copia[row_num,column_num]=aux
+            copia[row_num-1,column_num]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)
+        # tratamos columnas---------------------------    
+        if column_num==0:
+            aux=copia[row_num,column_num+1]
+            copia[row_num,column_num]=aux
+            copia[row_num,column_num+1]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)
+            
+        if column_num!=0 and column_num!=2:
+            aux=copia[row_num,column_num+1]
+            copia[row_num,column_num]=aux
+            copia[row_num,column_num+1]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)    
+            
+            aux=copia[row_num,column_num-1]
+            copia[row_num,column_num]=aux
+            copia[row_num,column_num-1]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)               
                     
-            if np.array_equiv(self.copia,self.original)==True:
-                print("Punto de encuentro: ")
-                print(self.original)
-                break
-                # print("Solucion: ")
-            # mostramos la ruta que hizo para solucionar el puzzle
-            # for matriz in movimientos_original:
-            #     print(matriz)
-        print("Matrices Finales: \n")
-        print(self.copia)
-        
-        print(self.original)        
-            # break
-            # multiplicamos por 2 porque es la cantidad de movimiento hasta encontrarse y luego, el camino inverso
-        print("Movimientos a partir del punto de encuentro: ",movimientos)
-        count=0
-        for i in reversed(movimientos_original):
-            print("Movimiento ",count," de ", movimientos)
-            print(i)
-            count+=1
-        # revisar los arrays de los movimientos de la matriz
+        if column_num==2:
+            aux=copia[row_num,column_num-1]
+            copia[row_num,column_num]=aux
+            copia[row_num,column_num-1]=0
+            nodos.append(copia)
+            copia=np.copy(matrix)       
+
+        return nodos
+    def metodo_bidireccional(self):pass
         
     def random_move(self,matrix):
         cero=np.where(matrix==0)
@@ -160,6 +136,17 @@ np_matrix_1=np.matrix('1 2 3; 4 5 6; 7 8 0')
 np_matrix_2=np.matrix('1 2 3; 4 5 6; 7 8 0')
 pz=Puzzle(np_matrix_1,np_matrix_2)
 # Se puede ejecutar un metodo a la vez
-pz.sort_matrix()
+matriz_desordenada=pz.sort_matrix()
 # pz.random_solve()
-pz.metodo_bidireccional()
+print("Matriz desordenada: ")
+print(matriz_desordenada)
+print("Nodos: ")
+nodos=pz.obtener_nodos_hijos(matriz_desordenada)
+i=0
+arbol=[]
+
+for nodo in nodos:
+    if not np.array_equal(nodo,np_matrix_1):
+        pz.obtener_nodos_hijos(nodo)
+    else:
+        pass
