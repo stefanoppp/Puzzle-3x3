@@ -1,4 +1,3 @@
-from tkinter import TRUE
 import numpy as np
 import random
 class Puzzle:
@@ -9,7 +8,7 @@ class Puzzle:
             
     def sort_matrix(self):
         count=0
-        while count<3:
+        while count<5:
             self.random_move(self.copia)
             count=count+1
         return self.copia
@@ -151,7 +150,7 @@ arbol=[]
 contador=0
 a=True
 if not np.array_equal(matriz_desordenada,np_matrix_1):
-    while a==TRUE:
+    while a==True:
         contador+=1
         for nodo in nodos_hijos:
             if not np.array_equal(nodo,np_matrix_1):
@@ -161,7 +160,7 @@ if not np.array_equal(matriz_desordenada,np_matrix_1):
             else:
                 print("Solucion hallada en el movimiento ",contador)
                 a=False
-                
+        print("Movimientos realizados: ",contador)
         nodos_hijos=[]        
         for hoja in arbol:
             nodos_hijos.append(hoja)    
