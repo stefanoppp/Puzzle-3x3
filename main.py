@@ -1,3 +1,4 @@
+from tkinter import TRUE
 import numpy as np
 import random
 class Puzzle:
@@ -8,7 +9,7 @@ class Puzzle:
             
     def sort_matrix(self):
         count=0
-        while count<50:
+        while count<3:
             self.random_move(self.copia)
             count=count+1
         return self.copia
@@ -140,7 +141,29 @@ matriz_desordenada=pz.sort_matrix()
 
 print("Matriz desordenada: ")
 print(matriz_desordenada)
+print("Resolucion: ")
+
 
 nodos_hijos=pz.obtener_nodos_hijos(matriz_desordenada)
 
-pz.random_solve()
+nietos=[]
+arbol=[]
+contador=0
+a=True
+if not np.array_equal(matriz_desordenada,np_matrix_1):
+    while a==TRUE:
+        contador+=1
+        for nodo in nodos_hijos:
+            if not np.array_equal(nodo,np_matrix_1):
+                nietos=pz.obtener_nodos_hijos(nodo)
+                for nieto in nietos:
+                    arbol.append(nieto)
+            else:
+                print("Solucion hallada en el movimiento ",contador)
+                a=False
+                
+        nodos_hijos=[]        
+        for hoja in arbol:
+            nodos_hijos.append(hoja)    
+else:
+    print("Matriz desordenada igual a la ordenada")
